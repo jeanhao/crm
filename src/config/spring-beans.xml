@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+		<!-- 登陆前处理 -->
+	<bean name="beforeMainAction" class="zeng.action.BeforeMainAction" scope="prototype"/>	
+	<!-- 基础数据 -->
+	<bean name="basicDictAction" class="zeng.action.basicData.BasicDictAction" scope="prototype"/>
+	<bean name="productInfoAction" class="zeng.action.basicData.ProductInfoAction" scope="prototype"/>
+	<bean name="storageAction" class="zeng.action.basicData.StorageAction" scope="prototype" />
+	<!-- 服务管理 -->
+	<bean name="cstServiceAction" class="zeng.action.cstService.CstServiceAction" scope="prototype" />
+	<!-- 客户管理 -->
+	<bean name="cstInfoAction" class="zeng.action.customer.CstInfoAction" scope="prototype"/>
+	<bean name="cstLostAction" class="zeng.action.customer.CstInfoAction" scope="prototype" />
+	<!-- 营销管理 -->
+	<bean name="saleChanceAction" class="zeng.action.sale.SaleChanceAction" scope="prototype" />
+	<bean name="salePlanAction" class="zeng.action.sale.SalePlanAction" scope="prototype"/>
+	<!-- 统计报表 -->
+	<bean name="statisticsReportAction" class="zeng.action.statisticsReport.StatisticsReport" scope="prototype" />
+	<!-- 系统管理 -->
+	<bean name="MyRightAction" class="zeng.action.system.MyRightAction" scope="prototype"/>
+	<bean name="SysRightAction" class="zeng.action.system.RightAction" scope="prototype"/>
+	<bean name="SysRoleAction" class="zeng.action.system.RoleAction" scope="prototype" />
+	<bean name="SysUserAction" class="zeng.action.system.userAction" scope="prototype" />
+</beans>

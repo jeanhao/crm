@@ -1,0 +1,23 @@
+body{
+			background:url(/Proj/resources/images/login.jpg);
+		}
+		.user {
+			background: url(/Proj/resources/images/man.gif) no-repeat 1px 2px;
+		}
+		.key,.user {
+			background-color: #FFFFFF;
+			padding-left: 20px;
+			font-weight: bold;
+			color: # 000033;
+		}
+		.key {
+			background: url(/Proj/resources/images/key.gif) no-repeat 1px 2px white;
+		}
+		#loginWin{
+			position:absolute;
+			left:700px;
+			top:300px;
+		}
+		#randCo{
+			margin-left:20px;
+		}

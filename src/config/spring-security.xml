@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+    xmlns:beans="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+                        http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.0.xsd">
+  
+    <!-- 
+        auto-config = true 则使用from-login. 如果不使用该属性 则默认为http-basic(没有session). 
+        lowercase-comparisons：表示URL比较前先转为小写。
+        path-type：表示使用Apache Ant的匹配模式。
+        access-denied-page：访问拒绝时转向的页面。
+        access-decision-manager-ref：指定了自定义的访问策略管理器。当系统角色名的前缀不是默认的ROLE_时，需要自定义访问策略管理器。
+     -->
+    <http auto-config="true" use-expressions="true" access-denied-page="/403.jsp"
+    	  lowercase-comparisons="false">
+    	  
+    	  <!-- 测试使用 -->
+    	  <intercept-url pattern="/**" access="permitAll()"/> 
+
+    	<!-- 未配置的资源 -->
+    	<intercept-url pattern="/**" access="permitAll()"/>
+      <!-- 
+            login-page：指定登录页面。
+            login-processing-url：指定了客户在登录页面中按下 Sign In 按钮时要访问的 URL。与登录页面form的action一致。其默认值为：/j_spring_security_check。
+            authentication-failure-url：指定了身份验证失败时跳转到的页面。
+            default-target-url：指定了成功进行身份验证和授权后默认呈现给用户的页面。
+            always-use-default-target：指定了是否在身份验证通过后总是跳转到default-target-url属性指定的URL。
+         -->
+    	<!-- 登录退出URL -->
+        <form-login login-processing-url="/login"
+        			authentication-failure-url="/failed"
+        			login-page="/toLogin"
+        			default-target-url="/beforeMain_doLogin"
+        			always-use-default-target="true"
+        			 />  
+        <!-- "记住我"功能，采用持久化策略（将用户的登录信息存放在数据库表中） -->
+		<!--         <sec:remember-me key="e37f8888-0ooo-22dd-bd0b-9900211c9a66" /> -->
+		
+		  <!-- 
+            logout-url：指定了用于响应退出系统请求的URL。其默认值为：/j_spring_security_logout。
+            logout-success-url：退出系统后转向的URL。
+            invalidate-session：指定在退出系统时是否要销毁Session。
+         -->
+       <logout logout-url="/logout" logout-success-url="/toLogin"/>
+        
+        <!-- 最多允许N个同时在线,若个数自定义,自行实现 -->
+        <session-management invalid-session-url="/timeOut" session-authentication-error-url="/toIndex"
+         session-fixation-protection="migrateSession">
+       <!-- 
+            max-sessions:允许用户帐号登录的次数。范例限制用户只能登录100次
+            exception-if-maximum-exceeded: 默认为false，此值表示：用户第二次登录时，前一次的登录信息都被清空。
+            当exception-if-maximum-exceeded="true"时系统会拒绝第二次登录。
+         -->
+        	<concurrency-control max-sessions="100" expired-url="/timeout" error-if-maximum-exceeded="true" />
+        </session-management>
+        
+        <!-- 自定义过滤器 -->
+        <custom-filter before="FORM_LOGIN_FILTER" ref="myAuthenticationFilter"/>
+    </http>
+
+	<beans:bean id="myAuthenticationFilter" class="zeng.security.MyAuthenticationFilter">
+		<beans:property name="myAuthentication" ref="myAuthentication"/>
+	</beans:bean>
+	
+	<beans:bean id="myAuthentication" class="zeng.security.MyAuthentication"/>
+	<!-- 认证管理器 -->
+	<authentication-manager alias="authenticationManager">
+     	<authentication-provider user-service-ref="myUserDetailsService">
+	   		<password-encoder hash="md5"/>  
+     	</authentication-provider>
+    </authentication-manager>
+	
+	<beans:bean id="myUserDetailsService" class="zeng.service.impl.MyUserDetailsService"></beans:bean>
+</beans:beans>
